@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refer & Earn</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #000, #444);
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    #referrals {
+      margin: 50px auto;
+      padding: 20px;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #referrals h3 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    .big-box {
+      padding: 20px;
+      background: black;
+      color: white;
+      border: 2px solid #ff0000;
+      border-radius: 10px;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 100%;
+    }
+    .big-box img {
+      width: 50px;
+      height: 50px;
+    }
+    .ref-text {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ffc107;
+    }
+    .highlight {
+      background: #ffc107;
+      color: #333;
+      padding: 5px 15px;
+      border-radius: 5px;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 10px;
+    }
+    .button {
+      padding: 20px 27px;
+      background: red;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      border: 2px solid black;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .button:hover {
+      background: #ff3333;
+    }
+  </style>
+</head>
+<body>
+  <!-- Welcome Section -->
+  <h1>Refer & Earn</h1>
+  <h2 id="userName"></h2>
+  <p><strong>Your Referral Code:</strong> <span id="referralCode" class="highlight"></span></p>
+
+  <!-- Total Referrals & Points Section -->
+  <div id="referrals">
+    <h3>Your Referral Details</h3>
+    <div class="big-box">
+      <div>
+        <img src="https://cdn-icons-png.flaticon.com/512/3293/3293466.png" alt="Human Icon">
+        <div class="ref-text">
+          <span id="totalReferrals">0</span> Referrals
+        </div>
+      </div>
+      <div>
+        <img src="https://cdn-icons-png.flaticon.com/512/3225/3225070.png" alt="Wallet Icon">
+        <div class="ref-text">
+          <span id="points">0</span> Points
+        </div>
+      </div>
+    </div>
+    <!-- Buttons Section -->
+    <div class="button-container">
+      <a href="https://trendymovies.github.io/exchange-store/" class="button">Redeem  Points</a>
+      <a href="https://trendymovies.github.io/refer-history/" class="button">Refer HIstory</a>
+    </div>
+  </div>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCBPGSYNVaPPDu7RWee9ymckMaI1VQNjd4",
+      authDomain: "trendy-movie.firebaseapp.com",
+      databaseURL: "https://trendy-movie-default-rtdb.firebaseio.com",
+      projectId: "trendy-movie",
+      storageBucket: "trendy-movie.firebasestorage.app",
+      messagingSenderId: "699469684359",
+      appId: "1:699469684359:web:34cc2adfc8019b89a76222",
+      measurementId: "G-54SX69JVY3"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Fetch User Details from Local Storage
+    const uid = localStorage.getItem('uid');
+    const email = localStorage.getItem('email');
+    if (!uid || !email) {
+      alert('No user logged in!');
+      window.location = '/login.html'; // Redirect to login if no user found.
+    }
+
+    const userNameElement = document.getElementById('userName');
+    const referralCodeElement = document.getElementById('referralCode');
+    const pointsElement = document.getElementById('points');
+    const totalReferralsElement = document.getElementById('totalReferrals');
+
+    // Fetch User Data from Firebase
+    database.ref(users/${uid}).once('value').then(snapshot => {
+      const userData = snapshot.val();
+      if (userData) {
+        userNameElement.textContent = Hello, ${userData.name};
+        referralCodeElement.textContent = userData.referralCode;
+        pointsElement.textContent = userData.points;
+
+        // Fetch Referred Users
+        database.ref('users').once('value').then(snapshot => {
+          const allUsers = snapshot.val();
+          const referrals = Object.values(allUsers || {}).filter(
+            u => u.referredBy === userData.referralCode
+          );
+
+          const newReferrals = referrals.length - (userData.totalReferrals || 0);
+          if (newReferrals > 0) {
+            const updatedPoints = userData.points + newReferrals;
+            database.ref(users/${uid}).update({
+              points: updatedPoints,
+              totalReferrals: referrals.length
+            });
+            pointsElement.textContent = updatedPoints;
+          }
+
+          totalReferralsElement.textContent = referrals.length;
+        });
+      } else {
+        alert('User not found in database!');
+      }
+    }).catch(error => {
+      console.error('Error fetching user data:', error);
+      alert('Failed to fetch data. Please try again.');
+    });
+  </script>
+</body>
+</html>
