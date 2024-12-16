@@ -98,13 +98,13 @@
     <h3>Your Referral Details</h3>
     <div class="big-box">
       <div>
-        <img src="https://cdn-icons-png.flaticon.com/512/3293/3293466.png" alt="Human Icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/8792/8792047.png" alt="Human Icon">
         <div class="ref-text">
           <span id="totalReferrals">0</span> Referrals
         </div>
       </div>
       <div>
-        <img src="https://cdn-icons-png.flaticon.com/512/3225/3225070.png" alt="Wallet Icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/8335/8335592.png" alt="Wallet Icon">
         <div class="ref-text">
           <span id="points">0</span> Points
         </div>
@@ -112,8 +112,8 @@
     </div>
     <!-- Buttons Section -->
     <div class="button-container">
-      <a href="https://trendymovies.github.io/exchange-store/" class="button">Redeem  Points</a>
-      <a href="https://trendymovies.github.io/refer-history/" class="button">Refer HIstory</a>
+      <a href="https://trendymovies.github.io/exchange-store/" class="button">Redeem Points</a>
+      <a href="https://trendymovies.github.io/refer-history/" class="button">Refer History</a>
     </div>
   </div>
 
@@ -148,10 +148,10 @@
     const totalReferralsElement = document.getElementById('totalReferrals');
 
     // Fetch User Data from Firebase
-    database.ref(users/${uid}).once('value').then(snapshot => {
+    database.ref(`users/${uid}`).once('value').then(snapshot => {
       const userData = snapshot.val();
       if (userData) {
-        userNameElement.textContent = Hello, ${userData.name};
+        userNameElement.textContent = `Hello, ${userData.name}`;
         referralCodeElement.textContent = userData.referralCode;
         pointsElement.textContent = userData.points;
 
@@ -165,7 +165,7 @@
           const newReferrals = referrals.length - (userData.totalReferrals || 0);
           if (newReferrals > 0) {
             const updatedPoints = userData.points + newReferrals;
-            database.ref(users/${uid}).update({
+            database.ref(`users/${uid}`).update({
               points: updatedPoints,
               totalReferrals: referrals.length
             });
