@@ -22,7 +22,7 @@
       margin: 50px auto;
       padding: 20px;
       max-width: 400px;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 0, 0.2);
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
       display: flex;
@@ -53,15 +53,36 @@
     .ref-text {
       font-size: 2rem;
       font-weight: bold;
-      color: #ffc107;
+      color: #d12424;
     }
     .highlight {
-      background: #ffc107;
+      background: #f3f30d;
       color: #333;
       padding: 5px 15px;
       border-radius: 5px;
       font-size: 1.8rem;
       font-weight: bold;
+    }
+    .divider-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      border: 2px solid #000000;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .divider-box span {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #141412;
+      margin-right: 10px;
+    }
+    .copy-icon {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
     }
     .button-container {
       display: flex;
@@ -91,8 +112,17 @@
   <!-- Welcome Section -->
   <h1>Refer & Earn</h1>
   <h2 id="userName"></h2>
-  <p><strong>Your Referral Code:</strong> <span id="referralCode" class="highlight"></span></p>
+  <p><strong>Your Referral Code ↓↓</strong></p>
 
+  <!-- Referral Code Divider Box -->
+  <div class="divider-box">
+    <span id="referralCode" class="highlight"></span>
+    <img src="https://cdn-icons-png.flaticon.com/512/3597/3597059.png" alt="Copy" class="copy-icon" onclick="copyReferralCode()">
+  </div>
+  <span>*ㅤShere Website Link With Your Refer Code To Earn
+   ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ                                          ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ                    ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ    
+     ㅤㅤ ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ website link --  https://trendymovie.netlify.app/
+  </span>
   <!-- Total Referrals & Points Section -->
   <div id="referrals">
     <h3>Your Referral Details</h3>
@@ -112,8 +142,8 @@
     </div>
     <!-- Buttons Section -->
     <div class="button-container">
-      <a href="https://trendymovies.github.io/exchange-store/" class="button">Redeem Points</a>
-      <a href="https://trendymovies.github.io/refer-history/" class="button">Refer History</a>
+      <a href="https://trendymovies.github.io/exchange-store/" class="button">Redeem</a>
+      <a href="https://trendymovies.github.io/refer-history/" class="button">Refers</a>
     </div>
   </div>
 
@@ -138,8 +168,8 @@
     const uid = localStorage.getItem('uid');
     const email = localStorage.getItem('email');
     if (!uid || !email) {
-      alert('No user logged in!');
-      window.location = '/login.html'; // Redirect to login if no user found.
+      alert('guest login can not access it');
+      window.location = 'login.com'; // Redirect to login if no user found.
     }
 
     const userNameElement = document.getElementById('userName');
@@ -181,6 +211,16 @@
       console.error('Error fetching user data:', error);
       alert('Failed to fetch data. Please try again.');
     });
+
+    // Copy Referral Code to Clipboard
+    function copyReferralCode() {
+      const referralCode = document.getElementById('referralCode').textContent;
+      navigator.clipboard.writeText(referralCode).then(() => {
+        alert('Referral code copied!');
+      }).catch(err => {
+        alert('Failed to copy referral code: ' + err);
+      });
+    }
   </script>
 </body>
 </html>
