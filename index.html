@@ -212,18 +212,6 @@
     const pointsElement = document.getElementById('points');
     const totalReferralsElement = document.getElementById('totalReferrals');
 
-    document.getElementById('copyBtn').addEventListener('click', function() {
-        const urlText = document.getElementById('websiteUrl').innerText;
-        navigator.clipboard.writeText(urlText).then(function() {
-            document.getElementById('copyMessage').style.display = 'block';
-            setTimeout(function() {
-                document.getElementById('copyMessage').style.display = 'none';
-            }, 2000);
-        }).catch(function(error) {
-            console.error('Error copying text: ', error);
-        });
-    });
-
     // Fetch User Data from Firebase
     database.ref(`users/${uid}`).once('value').then(snapshot => {
       const userData = snapshot.val();
@@ -258,7 +246,6 @@
       console.error('Error fetching user data:', error);
       alert('Failed to fetch data. Please try again.');
     });
-
     // Copy Referral Code to Clipboard
     function copyReferralCode() {
       const referralCode = document.getElementById('referralCode').textContent;
