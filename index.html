@@ -22,7 +22,7 @@
       margin: 50px auto;
       padding: 20px;
       max-width: 400px;
-      background: rgba(255, 255, 0, 0.2);
+      background: rgba(82, 82, 79, 0.2);
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
       display: flex;
@@ -119,11 +119,41 @@
     <span id="referralCode" class="highlight"></span>
     <img src="https://cdn-icons-png.flaticon.com/512/3597/3597059.png" alt="Copy" class="copy-icon" onclick="copyReferralCode()">
   </div>
-  <span>*ㅤShere Website Link With Your Refer Code To Earn
-   ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ                                          ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ                    ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ    
-     ㅤㅤ ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ website link --  https://trendymovie.netlify.app/
-  </span>
-  <!-- Total Referrals & Points Section -->
+  <div class="container">
+    <div class="url-box">
+      
+        
+  <!-- Instruction with Info Icon -->
+<span style="font-size: 1rem; color: #bfbfbf; display: flex; align-items: center;">
+  <img src="https://static-00.iconduck.com/assets.00/info-icon-2048x2048-tcgtx810.png" alt="Info" style="width: 18px; height: 18px; margin-right: 8px;">
+ ㅤCopy Website Link And Share It With Your Refer Code
+</span>
+
+  
+<!-- Website URL Divider Box -->
+<div class="divider-box" style="width: 420px; padding: 10px 12px; border-radius: 12px; background: #f8e1f4; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+  <span style="font-size: 1rem; color: #6f4e37;">Website Link:</span>
+  <span id="websiteUrl" class="highlight" style="font-size: 0.8rem; font-weight: bold; color: #ff6699;">https://trendymovie.netlify.app/</span>
+  <img src="https://cdn-icons-png.flaticon.com/512/3597/3597059.png" alt="Copy" class="copy-icon" onclick="copyWebsiteUrl()" style="width: 21px; height: 21px; cursor: pointer; margin-left: 10px;">
+</div>
+
+<script>
+  // Copy Website URL to Clipboard
+  function copyWebsiteUrl() {
+    const websiteUrl = document.getElementById('websiteUrl').textContent;
+    navigator.clipboard.writeText(websiteUrl).then(() => {
+      alert('Website URL copied!');
+    }).catch(err => {
+      alert('Failed to copy website URL: ' + err);
+    });
+  }
+</script>
+
+
+</script>
+
+
+<!-- Total Referrals & Points Section -->
   <div id="referrals">
     <h3>Your Referral Details</h3>
     <div class="big-box">
@@ -145,7 +175,12 @@
       <a href="https://trendymovies.github.io/exchange-store/" class="button">Redeem</a>
       <a href="https://trendymovies.github.io/refer-history/" class="button">Refers</a>
     </div>
-  </div>
+  <div style="margin-top: 20px; text-align: center;">
+  <a href="https://trendymovies.github.io/TERMS-AND-CONDITION/" style="font-size: 1rem; color: #007bff; text-decoration: none; font-weight: bold;">
+    Terms & Conditions
+  </a>
+</div>
+
 
   <script>
     // Firebase Configuration
@@ -176,6 +211,18 @@
     const referralCodeElement = document.getElementById('referralCode');
     const pointsElement = document.getElementById('points');
     const totalReferralsElement = document.getElementById('totalReferrals');
+
+    document.getElementById('copyBtn').addEventListener('click', function() {
+        const urlText = document.getElementById('websiteUrl').innerText;
+        navigator.clipboard.writeText(urlText).then(function() {
+            document.getElementById('copyMessage').style.display = 'block';
+            setTimeout(function() {
+                document.getElementById('copyMessage').style.display = 'none';
+            }, 2000);
+        }).catch(function(error) {
+            console.error('Error copying text: ', error);
+        });
+    });
 
     // Fetch User Data from Firebase
     database.ref(`users/${uid}`).once('value').then(snapshot => {
